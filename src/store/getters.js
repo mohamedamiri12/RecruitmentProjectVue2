@@ -73,6 +73,16 @@ const getters = {
       getSkillById: (state) => (id) => {
         return state.skills.find((skill) => skill.id == id);
       },
+      /**
+   *      Get Missions From Globale State
+   */
+   getMissions(state) {
+    return state.missions;
+  },
+  getMissionById: (state) => (id) => {
+    console.log("the Mission ");
+    return state.missions.find((mission) => mission.id == id);
+  },
 };
 
 export default getters;

@@ -2,8 +2,25 @@
   <div class="container-fluid">
     <div class="card">
       <div class="card-header d-flex justify-content-between">
-        <b>categories</b>
-        <button class="btn btn-success" @click="addNewCategory">Add new Category</button>
+        <b class="d-block">categories</b>
+        <div class="box">
+          <div class="input-group">
+            <div class="form-outline">
+              <input
+                id="search-input"
+                type="search"
+                class="form-control"
+                placeholder="Search"
+                v-model="search"
+              />
+            </div>
+            <button id="search-button" type="button" class="btn btn-primary">
+              <i class="fas fa-search"></i>
+            </button>
+            <button class="btn btn-success ml-2" @click="addNewCategory"><i class="fas fa-plus mr-2"></i>Add new Category</button>
+          </div>
+          
+        </div>
       </div>
       <div class="card-body">
         <!-- Categories List -->
@@ -38,10 +55,10 @@
                   <b-button
                     class="btn btn-primary py-1 px-2 mr-2"
                     @click="showCategory(category.id)"
-                    >Show</b-button
+                    ><i class="fas fa-expand-alt mr-2"></i>Show</b-button
                   >
                   <li class="list-inline-item">
-                    <button class="btn btn-warning py-1 px-2">Edit</button>
+                    <button class="btn btn-warning py-1 px-2"><i class="fas fa-edit mr-2"></i>Edit</button>
                   </li>
                 </ul>
               </div>
@@ -78,11 +95,18 @@ export default {
       error: '',
       success: '',
       isLoadingData: false,
+      search: null,
     };
   },
   computed: {
     categories() {
-      return this.$store.getters.getCategories;
+      let categories = this.$store.getters.getCategories;
+      if (this.search == null) return categories;
+      return categories.filter((category) => {
+        return (
+          category.name.match(this.search) 
+        );
+      });
     },
   },
   methods: {

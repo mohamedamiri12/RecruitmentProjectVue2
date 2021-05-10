@@ -170,7 +170,7 @@ const actions = {
         axios
           .get("http://localhost:8000/api/administrator/skills")
           .then((result) => {
-            resolve(result);
+            resolve(result.data);
             context.commit("SAVE_SKILLS", result.data);
           })
           .catch((error) => {
@@ -255,6 +255,48 @@ const actions = {
         });
     });
   },
+  /**
+   *      Missions Section
+  */
+
+    /**
+     *  Load Missions From Api
+     */
+    loadMissions(context) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get("http://localhost:8000/api/administrator/missions")
+          .then((result) => {
+            resolve(result);
+            context.commit("SAVE_MISSIONS", result.data);
+          })
+          .catch((error) => {
+            reject(error);
+            console.log(error.message);
+          });
+      });
+    },
+    /**
+     *  DElete Mission and Update Local State
+     */
+    deleteMission(context, payload) {
+      return new Promise((resolve, reject) => {
+        console.log("Before Axios");
+        console.log(payload);
+        console.log("http://localhost:8000/api/administrator/missions/" + payload);
+        axios
+          .delete("http://localhost:8000/api/administrator/missions/" + payload)
+          .then((res) => {
+            console.log("After delete Done Axios");
+            console.log(res.data);
+            resolve(res);
+          })
+          .catch((error) => {
+            console.log(error);
+            reject(error);
+          });
+      });
+    },
 
   
 

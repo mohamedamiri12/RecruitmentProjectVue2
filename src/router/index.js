@@ -11,6 +11,7 @@ const Dashboard = () => import("@/views/Dashboard");
 const Users = () => import("@/views/users/Users2");
 const User = () => import("@/views/users/User");
 const UserProfile = () => import("@/views/users/UserProfile");
+const AddUser = () => import("@/views/users/AddUser");
 
 // Admin
 const AdminProfile = () => import("@/views/Administrators/AdminProfile");
@@ -28,7 +29,12 @@ const CandidateProfile = () => import("@/views/candidates/CandidateProfile");
 //Categories
 const Categories = () => import("@/views/categories/Categories");
 const Category = () => import("@/views/categories/Category");
+const CategoryProfile = () => import("@/views/categories/CategoryProfile");
 const NewCategory = () => import("@/views/categories/NewCategory");
+
+//Missions
+const Missions = () => import("@/views/missions/Missions");
+const Mission = () => import("@/views/missions/Mission");
 
 
 //Skills
@@ -39,7 +45,8 @@ const SkillProfile = () => import("@/views/skills/SkillProfile");
 
 
 // Registration
-const Login = () => import("@/views/registration/signIn");
+const Login = () => import("@/views/registration/Login");
+const Test = () => import("@/views/registration/Registration");
 const Register = () => import("@/views/registration/signUp");
 
 Vue.use(Router);
@@ -94,6 +101,11 @@ function configRoutes() {
               path: "",
               name: "Users",
               component: Users,
+            },
+            {
+              path: "add",
+              name: "Users Add",
+              component: AddUser,
             },
             {
               path: ":id",
@@ -260,6 +272,42 @@ function configRoutes() {
               },
               name: "Category",
               component: Category,
+              children: [
+                {
+                  path: "edit",
+                  name: "Profile",
+                  component: CategoryProfile,
+                },
+              ],
+            },
+          ]
+        },
+        // Missions Route
+        {
+          path: "dash/missions",
+          meta: {
+            requiresAuth: true,
+            is_admin : true,
+            label: "Missions"
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            },
+          },
+          children: [
+            {
+              path: "",
+              name: "Missions",
+              component: Missions,
+            },
+            {
+              path: "add",
+              meta: {
+                label: "New Category",
+              },
+              name: "New Category",
+              component: NewCategory,
               /*children: [
                 {
                   path: "edit",
@@ -268,6 +316,22 @@ function configRoutes() {
                 },
               ],*/
             },
+            {
+              path: ":id",
+              meta: {
+                label: "Mission Details",
+              },
+              name: "Mission",
+              component: Mission,
+              /*children: [
+                {
+                  path: "edit",
+                  name: "Profile",
+                  component: CandidateProfile,
+                },
+              ],*/
+            },
+            
           ]
         }
       ]
@@ -292,6 +356,13 @@ function configRoutes() {
         guest: true
       }
     },
+    {
+      path: "/test",
+      name: "test",
+      component: Test,
+      meta: {
+        guest: true
+      }}
   ];
 }
 

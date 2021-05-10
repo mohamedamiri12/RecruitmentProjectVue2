@@ -2,8 +2,21 @@
   <CRow>
     <CCol col="12" lg="6">
       <div class="card">
-        <div class="card-header"><b>User id : {{ user.id }}</b></div>
+        <div class="card-header">
+          <b>User id : {{ user.id }}</b>
+        </div>
         <div class="card-body">
+          <!-- User Image -->
+          <img
+            :src="
+              'http://localhost:8000/storage/administratorImages/' +
+                user.id +
+                '/' +
+                user.administrator_image
+            "
+            alt=""
+            class="d-block img-fluid img-profile mb-4"
+          />
           <table class="table table-striped table-fixed text-center">
             <tbody>
               <tr>
@@ -27,10 +40,10 @@
         </div>
         <div class="card-footer text-muted">
           <button class="btn btn-primary float-left" @click="goBack">
-            Back
+            <i class="fas fa-undo-alt mr-2"></i>Back
           </button>
           <button class="btn btn-warning float-right" @click="showUpdateForm">
-            Edit
+            <i class="fas fa-edit mr-2"></i>Edit
           </button>
         </div>
       </div>
@@ -42,32 +55,45 @@
 </template>
 
 <script>
-import BaseCard from './BaseCard.vue'
+import BaseCard from "./BaseCard.vue";
 export default {
-  name: 'User',
-  components:{
-    BaseCard
+  name: "User",
+  components: {
+    BaseCard,
   },
-  data () {
+  data() {
     return {
       usersOpened: null,
     };
   },
-  computed:{
-    user(){
+  computed: {
+    user() {
       const id = parseInt(this.$route.params.id);
-      console.log('id === '+id);
+      console.log("id === " + id);
       return this.$store.getters.getUserById2(id);
-    }
+    },
   },
   methods: {
     goBack() {
-      this.usersOpened ? this.$router.go(-1) : this.$router.push({path: '/dash/users'})
+      this.usersOpened
+        ? this.$router.go(-1)
+        : this.$router.push({ path: "/dash/users" });
     },
     showUpdateForm() {
       const id = this.$route.params.id;
       this.$router.push({ path: "/dash/users/" + id + "/edit" });
     },
-  }
-}
+  },
+};
 </script>
+
+
+<style scoped>
+.img-profile{
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+  margin: 0 auto;
+  box-shadow: 0 0 30px 6px rgba(37,50,70,.1);
+}
+</style>

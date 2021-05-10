@@ -22,12 +22,33 @@
           <b-spinner variant="success" label="Spinning"></b-spinner>
         </div>
         <form action="" enctype="multipart/form-data">
-          <CInput
-            description="Enter your skill name"
-            label="Name"
-            horizontal
-            v-model="skill.name"
-          />
+        <!-- name -->
+              <div class="mb-2">
+                <label>Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter your skill name"
+                  :class="validationForName"
+                  id="category_name"
+                  v-model="skill.name"
+                  aria-describedby="emailHelp"
+                  class="form-control pl-3"
+                />
+                <!-- If the errors is empty -->
+                <div v-if="!validationName" class="valid-feedback">
+                  Looks good!
+                </div>
+                <!-- If the errors is full -->
+                <div v-if="validationName" class="invalid-feedback">
+                  <span
+                    class="d-block"
+                    v-for="(error, index) in NameErrors"
+                    :key="index"
+                  >
+                    {{ error }}
+                  </span>
+                </div>
+              </div>
         </form>
       </CCardBody>
       <CCardFooter>
@@ -59,14 +80,37 @@ export default {
       successUpdate: "",
       error: "",
       countDown: 5,
+      /* data for validation */
+      NameErrors: [],
+      validationForName: null,
     };
   },
   computed: {
+    validationName() {
+      return this.NameErrors.length ? true : false;
+    },
     skill() {
       return this.editedSkill;
     },
   },
   methods: {
+    /**
+     *  Method to validate Name
+     */
+    validName: function(e) {
+      this.NameErrors = [];
+
+      if (!this.skill.name) {
+        this.NameErrors.push("Name should not be empty");
+      }
+      if (this.skill.name.length < 4) {
+        this.NameErrors.push("Name must be more than 4 characters");
+      }
+
+      this.validationForName = this.NameErrors.length
+        ? "is-invalid"
+        : "is-valid";
+    },
     countDownTimer() {
       if (this.countDown > 0) {
         setTimeout(() => {
@@ -77,6 +121,22 @@ export default {
     },
     updateSkill() {
       this.isLoading = true;
+      this.error = null;
+
+/**
+       *  Call the validation methods Before send data to backend
+       */
+      this.validName();
+
+/**
+       *    Return if the errors is here
+       */
+      if (
+        this.NameErrors.length
+      ) {
+        this.isLoading = false;
+        return;
+      }
 
       const updatedSkill = new FormData();
 

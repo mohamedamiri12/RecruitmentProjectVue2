@@ -22,34 +22,115 @@
           <b-spinner variant="success" label="Spinning"></b-spinner>
         </div>
         <form action="" enctype="multipart/form-data">
-          <CInput
-            description="Enter your first name"
-            label="First Name"
-            horizontal
-            v-model="candidate.first_name"
-          />
-          <CInput
-            description="Enter your last name"
-            label="Last Name"
-            horizontal
-            v-model="candidate.last_name"
-          />
-          <CInput
-            label="Phone"
-            description="your phone number must be 10 caracters"
-            placeholder="Enter your phone number"
-            horizontal
-            v-model="candidate.phone_number"
-          />
-          <CInput
-            label="Email"
-            description="Please enter your email"
-            placeholder="Enter your email"
-            type="email"
-            horizontal
-            autocomplete="email"
-            v-model="candidate.email"
-          />
+        <!--First name-->
+          <div class="mb-2">
+                <label>First Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter your first name"
+                  :class="validationForFirstName"
+                  id="first_name"
+                  v-model="candidate.first_name"
+                  aria-describedby="emailHelp"
+                  class="form-control pl-3"
+                />
+                <!-- If the errors is empty -->
+                <div v-if="!validationFirstName" class="valid-feedback">
+                  Looks good!
+                </div>
+                <!-- If the errors is full -->
+                <div v-if="validationFirstName" class="invalid-feedback">
+                  <span
+                    class="d-block"
+                    v-for="(error, index) in firstNameErrors"
+                    :key="index"
+                  >
+                    {{ error }}
+                  </span>
+                </div>
+          </div>
+          <!-- last name -->
+            <div class="mb-2">
+            <label>Last Name</label>
+            <input
+                  type="text"
+                  placeholder="Enter your last name"
+                  :class="validationForLastName"
+                  id="last_name"
+                  v-model="candidate.last_name"
+                  aria-describedby="emailHelp"
+                  class="form-control pl-3"
+                />
+                <!-- If the errors is empty -->
+                <div v-if="!validationLastName" class="valid-feedback">
+                  Looks good!
+                </div>
+                <!-- If the errors is full -->
+                <div v-if="validationLastName" class="invalid-feedback">
+                  <span
+                    class="d-block"
+                    v-for="(error, index) in lastNameErrors"
+                    :key="index"
+                  >
+                    {{ error }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- phone -->
+              <div class="mb-2">
+              <label>Phone Number</label>
+                <input
+                  type="text"
+                  placeholder="Enter your phone number"
+                  :class="validationForPhoneNumber"
+                  id="phone_number"
+                  v-model="candidate.phone_number"
+                  aria-describedby="emailHelp"
+                  class="form-control pl-3"
+                />
+                <!-- If the errors is empty -->
+                <div v-if="!validationPhoneNumber" class="valid-feedback">
+                  Looks good!
+                </div>
+                <!-- If the errors is full -->
+                <div v-if="validationPhoneNumber" class="invalid-feedback">
+                  <span
+                    class="d-block"
+                    v-for="(error, index) in phoneNumberErrors"
+                    :key="index"
+                  >
+                    {{ error }}
+                  </span>
+                </div>
+              </div>
+          <!-- email -->
+          <div class="mb-2">
+              <label>Email</label>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  :class="validationForEmail"
+                  id="email"
+                  v-model="candidate.email"
+                  aria-describedby="emailHelp"
+                  class="form-control pl-3"
+                />
+                <!-- If the errors is empty -->
+                <div v-if="!validationEmail" class="valid-feedback">
+                  Looks good!
+                </div>
+                <!-- If the errors is full -->
+                <div v-if="validationEmail" class="invalid-feedback">
+                  <span
+                    class="d-block"
+                    v-for="(error, index) in emailErrors"
+                    :key="index"
+                  >
+                    {{ error }}
+                  </span>
+                </div>
+              </div>
           <!-- Upload File -->
           <p class="mt-3 mb-2">Candidate Image</p>
           <div class="custom-file">
@@ -103,9 +184,41 @@ export default {
       error: "",
       candidate_image: null,
       countDown: 5,
+      /* data for validation */
+      firstNameErrors: [],
+      lastNameErrors: [],
+      emailErrors: [],
+      passwordErrors: [],
+      phoneNumberErrors: [],
+      userImageErrors: [],
+      validationForFirstName: null,
+      validationForLastName: null,
+      validationForEmail: null,
+      validationForPassword: null,
+      validationForPhoneNumber: null,
+      validationForUserImage: null,
     };
   },
   computed: {
+    /* computed methods for validation */
+    validationFirstName() {
+      return this.firstNameErrors.length ? true : false;
+    },
+    validationLastName() {
+      return this.lastNameErrors.length ? true : false;
+    },
+    validationEmail() {
+      return this.emailErrors.length ? true : false;
+    },
+    validationPassword() {
+      return this.passwordErrors.length ? true : false;
+    },
+    validationPhoneNumber() {
+      return this.phoneNumberErrors.length ? true : false;
+    },
+    validationUserImage() {
+      return this.userImageErrors.length ? true : false;
+    },
     candidate() {
       return this.editedCandidate;
     },
@@ -114,6 +227,99 @@ export default {
     },
   },
   methods: {
+    /**
+     *  Method to validate First Name
+     */
+    validFirstName: function(e) {
+      console.log("valid first Name ? ");
+      this.firstNameErrors = [];
+
+      if (!this.candidate.first_name) {
+        this.firstNameErrors.push("First Name should not be empty");
+      }
+      if (this.candidate.first_name.length < 4) {
+        this.firstNameErrors.push("First Name must be more than 4 characters");
+      }
+
+      this.validationForFirstName = this.firstNameErrors.length
+        ? "is-invalid"
+        : "is-valid";
+    },
+    /**
+     *  Method to validate Last Name
+     */
+    validLastName: function(e) {
+      this.lastNameErrors = [];
+
+      if (!this.candidate.last_name) {
+        this.lastNameErrors.push("Last Name should not be empty");
+      }
+      if (this.candidate.last_name.length < 4) {
+        this.lastNameErrors.push("Last Name must be more than 4 characters");
+      }
+
+      this.validationForLastName = this.lastNameErrors.length
+        ? "is-invalid"
+        : "is-valid";
+    },
+    /*
+     *  Method to validate Email
+     */
+    validEmail: function(e) {
+      this.emailErrors = [];
+
+      if (!this.candidate.email) {
+        this.emailErrors.push("Email should not be empty");
+      }
+      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!re.test(this.candidate.email)) {
+        this.emailErrors.push("Email must have a valid format");
+      }
+      this.validationForEmail = this.emailErrors.length
+        ? "is-invalid"
+        : "is-valid";
+    },
+
+    /**
+     *  Method to validate Email
+     */
+    validPassword: function(e) {
+      this.passwordErrors = [];
+
+      if (!this.password) {
+        this.passwordErrors.push("Password should not be empty");
+      }
+      /**
+       *  this code will be available after update all users passsword
+       */
+      var re = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+      if (!re.test(this.password)) {
+        this.passwordErrors.push(
+          "password must contains letter,numbers and symbols like : @+:-..."
+        );
+      }
+
+      this.validationForPassword = this.passwordErrors.length
+        ? "is-invalid"
+        : "is-valid";
+    },
+    /**
+     *  Method to validate Phone Number
+     */
+    validPhoneNumber: function(e) {
+      this.phoneNumberErrors = [];
+
+      if (!this.candidate.phone_number) {
+        this.phoneNumberErrors.push("Phone Number should not be empty");
+      }
+      if (this.candidate.phone_number.length != 10) {
+        this.phoneNumberErrors.push("Phone Number must be 10 numbers");
+      }
+
+      this.validationForPhoneNumber = this.phoneNumberErrors.length
+        ? "is-invalid"
+        : "is-valid";
+    },
     countDownTimer() {
       if (this.countDown > 0) {
         setTimeout(() => {
@@ -127,7 +333,16 @@ export default {
       console.log(this.candidate_image);
     },
     updateCandidate() {
+      this.error = null;
       this.isLoading = true;
+
+       /**
+       *  Call the validation methods Before send data to backend
+       */
+      this.validFirstName();
+      this.validLastName();
+      this.validEmail();
+      this.validPhoneNumber();
 
       const updatedCAndidate = new FormData();
 

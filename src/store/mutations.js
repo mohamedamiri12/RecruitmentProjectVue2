@@ -97,7 +97,17 @@ const mutations = {
         state.skills = payload;
     },
 
+/**
+ *      Missions Mutations Section : 
+ */    
 
+    /**
+     *      Set Comming Missions From Api To State
+     */
+
+     SAVE_MISSIONS(state, payload){
+        state.missions = payload;
+    },
 /**
  *      Registration Mutations Section : 
  */    

@@ -27,9 +27,14 @@ const state = {
 
     
     /**
-     *      Skills State
+     *      Candidates State
      */
      candidates: [],
+
+     /**
+     *      Missions State
+     */
+      missions: [],
 }
 
 export default state;

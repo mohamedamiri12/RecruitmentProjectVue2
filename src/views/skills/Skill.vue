@@ -15,10 +15,10 @@
         </div>
         <div class="card-footer text-muted">
           <button class="btn btn-primary float-left" @click="goBack">
-            Back
+            <i class="fas fa-undo-alt mr-2"></i>Back
           </button>
           <button class="btn btn-warning float-right" @click="showUpdateForm">
-            Edit
+            <i class="fas fa-edit mr-2"></i>Edit
           </button>
         </div>
       </div>

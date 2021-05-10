@@ -1,7 +1,24 @@
 <template>
   <div class="container-fluid">
     <div class="card">
-      <div class="card-header"><b>Clients</b></div>
+      <div class="card-header d-flex justify-content-between">
+      <b class="d-block">Clients</b>
+      <div class="box">
+          <div class="input-group">
+            <div class="form-outline">
+              <input
+                id="search-input"
+                type="search"
+                class="form-control"
+                placeholder="Search"
+                v-model="search"
+              />
+            </div>
+            <button id="search-button" type="button" class="btn btn-primary">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div></div>
       <div class="card-body">
         <div
           class="d-flex justify-content-center px-4 py-3 my-3"
@@ -34,14 +51,14 @@
               variant="primary mr-2"
               @click="showClient(row.item.id)"
               class="mr-2"
-              >Show</b-button
+              ><i class="fas fa-expand-alt mr-2"></i>Show</b-button
             >
 
             <b-button
               size="sm"
               variant="danger mr-2"
               @click="deleteClient(row.item.id)"
-              >Delete</b-button
+              ><i class="fas fa-trash-alt mr-2"></i>Delete</b-button
             >
           </template>
           <!-- Suspend Button -->
@@ -51,14 +68,14 @@
               size="sm"
               variant="warning mr-2"
               @click="suspendClient(row.item)"
-              >Suspend</b-button
+              ><i class="fas fa-ban mr-2"></i>Suspend</b-button
             >
             <b-button
               v-if="!row.item.is_suspended"
               size="sm"
               variant="success mr-2"
               @click="activateClient(row.item)"
-              >Activate</b-button
+              ><i class="fas fa-check mr-2"></i>Activate</b-button
             >
           </template>
         </b-table>
@@ -112,11 +129,19 @@ export default {
       numberOfItems: 0,
       headVariant: "dark",
       isLoadingData: false,
+      search: null,
     };
   },
   computed: {
     clients() {
-      return this.$store.getters.getClients;
+      let clients = this.$store.getters.getClients;
+      if (this.search == null) return clients;
+      return clients.filter((client) => {
+        return (
+          client.first_name.match(this.search) ||
+          client.last_name.match(this.search)
+        );
+      });
     },
     rows() {
       return this.clients.length;

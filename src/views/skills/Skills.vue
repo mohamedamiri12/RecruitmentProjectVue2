@@ -1,7 +1,25 @@
 <template>
   <div class="container-fluid">
     <div class="card">
-      <div class="card-header"><b>Skills</b></div>
+      <div class="card-header d-flex justify-content-between">
+        <b class="d-block">Skills</b>
+        <div class="box">
+          <div class="input-group">
+            <div class="form-outline">
+              <input
+                id="search-input"
+                type="search"
+                class="form-control"
+                placeholder="Search"
+                v-model="search"
+              />
+            </div>
+            <button id="search-button" type="button" class="btn btn-primary">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+          
+        </div></div>
       <div class="card-body">
         <div
           class="d-flex justify-content-center px-4 py-3 my-3"
@@ -34,14 +52,14 @@
               variant="primary mr-2"
               @click="showSkill(row.item.id)"
               class="mr-2"
-              >Show</b-button
+              ><i class="fas fa-expand-alt mr-2"></i>Show</b-button
             >
 
             <b-button
               size="sm"
               variant="danger mr-2"
               @click="deleteSkill(row.item.id)"
-              >Delete</b-button
+              ><i class="fas fa-trash-alt mr-2"></i>Delete</b-button
             >
           </template>
         </b-table>
@@ -91,11 +109,18 @@ export default {
       numberOfItems: 0,
       headVariant: "dark",
       isLoadingData: false,
+      search: null,
     };
   },
   computed: {
     skills() {
-      return this.$store.getters.getSkills;
+      let skills = this.$store.getters.getSkills;
+      if (this.search == null) return skills;
+      return skills.filter((skill) => {
+        return (
+          skill.name.match(this.search) 
+        );
+      });
     },
     rows() {
       return this.skills.length;

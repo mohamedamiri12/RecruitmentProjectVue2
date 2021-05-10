@@ -1,7 +1,25 @@
 <template>
   <div class="container-fluid">
     <div class="card">
-      <div class="card-header"><b>Users</b></div>
+      <div class="card-header d-flex justify-content-between">
+        <b class="d-block">Users</b>
+        <div class="box">
+          <div class="input-group">
+            <div class="form-outline">
+              <input
+                id="search-input"
+                type="search"
+                class="form-control"
+                placeholder="Search"
+                v-model="search"
+              />
+            </div>
+            <button id="search-button" type="button" class="btn btn-primary">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </div>
       <div class="card-body">
         <div
           class="d-flex justify-content-center px-4 py-3 my-3"
@@ -14,8 +32,9 @@
           ></b-spinner>
           Loading ...
         </div>
-        <!-- Users Table -->
+        <!-- Users Table for computer Screens -->
         <b-table
+          v-if="users.length"
           head-variant="dark"
           hover
           striped
@@ -25,6 +44,7 @@
           :per-page="perPage"
           :total-rows="rows"
           :current-page="currentPage"
+          responsive
           class="text-center"
         >
           <!-- Actions Button -->
@@ -34,14 +54,14 @@
               variant="primary mr-2"
               @click="showUser(row.item.id)"
               class="mr-2"
-              >Show</b-button
+              ><i class="fas fa-expand-alt mr-2"></i>Show</b-button
             >
 
             <b-button
               size="sm"
               variant="danger mr-2"
               @click="deleteUser(row.item.id)"
-              >Delete</b-button
+              ><i class="fas fa-trash-alt mr-2"></i>Delete</b-button
             >
           </template>
           <!-- Suspend Button -->
@@ -51,17 +71,23 @@
               size="sm"
               variant="warning mr-2"
               @click="suspendUser(row.item)"
-              >Suspend</b-button
+              ><i class="fas fa-ban mr-2"></i>Suspend</b-button
             >
             <b-button
               v-if="!row.item.is_suspended"
               size="sm"
               variant="success mr-2"
               @click="activateUser(row.item)"
-              >Activate</b-button
+              ><i class="fas fa-check mr-2"></i>Activate</b-button
             >
           </template>
         </b-table>
+
+        <!-- Users Table for mobile Screens -->
+
+        <div class="text-center no-items-box py-5" v-if="!users.length">
+          <i class="fas fa-ban" style="color:red"></i> No items to show
+        </div>
       </div>
       <!-- Loading Data Spinner -->
       <div
@@ -71,7 +97,8 @@
         <b-spinner variant="primary" label="Spinning" class="mr-3"></b-spinner>
         Loading ...
       </div>
-      <div class="card-footer text-muted w-100">
+      <div class="card-footer text-muted w-100 d-flex justify-content-between">
+        <div class=""></div>
         <b-pagination
           class="d-flex justify-content-center mt-2 mb-1"
           v-model="currentPage"
@@ -83,6 +110,11 @@
           next-text="⏩"
           last-text="⏭"
         ></b-pagination>
+        <div class="mr-2 float-right mt-2">
+          <button class="btn btn-success" @click="registerUser">
+            <i class="fas fa-plus"></i> Add user
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -109,11 +141,22 @@ export default {
       perPage: 5,
       isLoading: false,
       isLoadingData: false,
+      search: null,
     };
   },
   computed: {
+    /**
+     *  Return Users and Apply search filter
+     */
     users() {
-      return this.$store.getters.getUsers;
+      let users = this.$store.getters.getUsers;
+      if (this.search == null) return users;
+      return users.filter((user) => {
+        return (
+          user.first_name.match(this.search) ||
+          user.last_name.match(this.search)
+        );
+      });
     },
     rows() {
       return this.users.length;
@@ -146,7 +189,8 @@ export default {
     },
     loadUsers() {
       this.isLoadingData = true;
-      this.$store.dispatch("loadUsers")
+      this.$store
+        .dispatch("loadUsers")
         .then((result) => {
           this.isLoadingData = false;
         })
@@ -162,7 +206,7 @@ export default {
         .then((res) => {
           this.success = "User's deleted successfully !!!";
           console.log("User's deleted successfully !!!");
-          this.loadClients();
+          this.loadUsers();
         })
         .catch((error) => {
           console.log(error.message);
@@ -171,6 +215,9 @@ export default {
     },
     showUser(id) {
       this.$router.push({ path: `users/${id}` });
+    },
+    registerUser(){
+      this.$router.push({ path: `users/add` });
     },
     suspendUser(item) {
       this.isLoading = true;
@@ -184,7 +231,7 @@ export default {
       axios
         .put(apiUpdateRoute, suspendedUser, config)
         .then((res) => {
-          console.log("After Done Axios ==> suspend Client");
+          console.log("After Done Axios ==> suspend User");
           this.isLoading = false;
           this.success = "The suspended succeded";
           this.loadUsers();
@@ -229,5 +276,9 @@ export default {
 tbody tr td {
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
+}
+.no-items-box {
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 </style>

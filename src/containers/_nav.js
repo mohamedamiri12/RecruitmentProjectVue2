@@ -46,6 +46,12 @@ export default [
         to: '/dash/skills',
         icon: 'cil-library'
       },
+      {
+        _name: 'CSidebarNavItem',
+        name: 'Missions',
+        to: '/dash/missions',
+        icon: 'cil-library'
+      },
     ]
   }
 ]

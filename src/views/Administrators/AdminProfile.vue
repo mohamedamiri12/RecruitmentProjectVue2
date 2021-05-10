@@ -92,6 +92,12 @@
 
 <script>
 import axios from 'axios'
+
+import getHeader from '../../config.js'
+
+axios.defaults.headers.common['Accept'] = getHeader().Accept;
+axios.defaults.headers.common['Authorization'] = getHeader().Authorization;
+
 export default {
   props: ["administrator"],
   data() {

@@ -1,7 +1,24 @@
 <template>
   <div class="container-fluid">
     <div class="card">
-      <div class="card-header"><b>Candidates</b></div>
+      <div class="card-header d-flex justify-content-between">
+        <b class="d-block">Candidates</b>
+        <div class="box">
+          <div class="input-group">
+            <div class="form-outline">
+              <input
+                id="search-input"
+                type="search"
+                class="form-control"
+                placeholder="Search"
+                v-model="search"
+              />
+            </div>
+            <button id="search-button" type="button" class="btn btn-primary">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div></div>
       <div class="card-body">
         <div
           class="d-flex justify-content-center px-4 py-3 my-3"
@@ -34,14 +51,14 @@
               variant="primary mr-2"
               @click="showCandidate(row.item.id)"
               class="mr-2"
-              >Show</b-button
+              ><i class="fas fa-expand-alt mr-2"></i>Show</b-button
             >
 
             <b-button
               size="sm"
               variant="danger mr-2"
               @click="deleteCandidate(row.item.id)"
-              >Delete</b-button
+              ><i class="fas fa-trash-alt mr-2"></i>Delete</b-button
             >
           </template>
           <!-- Suspend Button -->
@@ -51,14 +68,14 @@
               size="sm"
               variant="warning mr-2"
               @click="suspendCandidate(row.item)"
-              >Suspend</b-button
+              ><i class="fas fa-ban mr-2"></i>Suspend</b-button
             >
             <b-button
               v-if="!row.item.is_suspended"
               size="sm"
               variant="success mr-2"
               @click="activateCandidate(row.item)"
-              >Activate</b-button
+              ><i class="fas fa-check mr-2"></i>Activate</b-button
             >
           </template>
         </b-table>
@@ -112,11 +129,19 @@ export default {
       numberOfItems: 0,
       headVariant: "dark",
       isLoadingData: false,
+      search: null,
     };
   },
   computed: {
     candidates() {
-      return this.$store.getters.getCandidates;
+      let candidates = this.$store.getters.getCandidates;
+      if (this.search == null) return candidates;
+      return candidates.filter((candidate) => {
+        return (
+          candidate.first_name.match(this.search) ||
+          candidate.last_name.match(this.search)
+        );
+      });
     },
     rows() {
       return this.candidates.length;
