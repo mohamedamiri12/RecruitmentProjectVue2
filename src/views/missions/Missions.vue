@@ -99,14 +99,14 @@
               variant="success mr-2"
               @click="validateMission(row.item.id)"
               class="mr-2"
-              ><i class="fas fa-check mr-2"></i> Validate</b-button
+              ><i class="fas fa-search mr-2"></i> Validate</b-button
             >
 
             <b-button
               size="sm"
               variant="danger mr-2"
               @click="deleteMission(row.item.id)"
-              ><i class="fas fa-trash-alt mr-2"></i> Delete</b-button
+              >Delete</b-button
             >
           </template>
         </b-table>
@@ -223,7 +223,7 @@ export default {
         .then((res) => {
           this.success = "Missions's deleted successfully !!!";
           console.log("Mission's deleted successfully !!!");
-          this.loadClients();
+          this.loadMissions();
         })
         .catch((error) => {
           console.log(error.message);

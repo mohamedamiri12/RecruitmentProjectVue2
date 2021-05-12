@@ -53,7 +53,6 @@
               class="mr-2"
               ><i class="fas fa-expand-alt mr-2"></i>Show</b-button
             >
-
             <b-button
               size="sm"
               variant="danger mr-2"
