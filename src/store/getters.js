@@ -83,6 +83,17 @@ const getters = {
     console.log("the Mission ");
     return state.missions.find((mission) => mission.id == id);
   },
+
+  /**
+   *      Get Contracts From Globale State
+   */
+   getContracts(state) {
+    return state.contracts;
+  },
+  getContractById: (state) => (id) => {
+    console.log("the Contract ");
+    return state.contracts.find((contract) => contract.id == id);
+  },
 };
 
 export default getters;

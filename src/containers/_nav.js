@@ -52,6 +52,12 @@ export default [
         to: '/dash/missions',
         icon: 'cil-library'
       },
+      {
+        _name: 'CSidebarNavItem',
+        name: 'Contracts',
+        to: '/dash/contracts',
+        icon: 'cil-library'
+      },
     ]
   }
 ]

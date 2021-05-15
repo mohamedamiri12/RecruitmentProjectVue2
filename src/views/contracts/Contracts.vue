@@ -2,9 +2,8 @@
   <div class="container-fluid">
     <div class="card">
       <div class="card-header d-flex justify-content-between">
-        <b class="d-block">Missions</b>
+        <b class="d-block">Contracts</b>
         <div class="box">
-          <!-- Search Box -->
           <div class="input-group">
             <div class="form-outline">
               <input
@@ -19,6 +18,7 @@
               <i class="fas fa-search"></i>
             </button>
           </div>
+          
         </div>
       </div>
       <div class="card-body">
@@ -34,20 +34,20 @@
           ></b-spinner>
           Loading ...
         </div>
-        <!-- Missions Table for computer Screens -->
+        <!-- Contracts Table for computer Screens -->
         <b-table
-          v-if="missions.length"
+          v-if="contracts.length"
           head-variant="dark"
           hover
           striped
-          id="missions-table"
-          :items="missions"
+          id="contracts-table"
+          :items="contracts"
           :fields="fields"
           :per-page="perPage"
           :total-rows="rows"
           :current-page="currentPage"
           responsive
-          @row-clicked="showMission"
+          @row-clicked="showContract"
           class="text-center"
         >
           <!-- Client Button -->
@@ -97,7 +97,7 @@
             <b-button
               size="sm"
               variant="success mr-2"
-              @click="validateMission(row.item.id)"
+              @click="validateContract(row.item.id)"
               class="mr-2"
               ><i class="fas fa-search mr-2"></i> Validate</b-button
             >
@@ -105,15 +105,15 @@
             <b-button
               size="sm"
               variant="danger mr-2"
-              @click="deleteMission(row.item.id)"
-              ><i class="fas fa-trash-alt mr-2"></i>Delete</b-button
+              @click="deleteContract(row.item.id)"
+              >Delete</b-button
             >
           </template>
         </b-table>
 
-        <!-- Missions Table for mobile Screens -->
+        <!-- contracts Table for mobile Screens -->
 
-        <div class="text-center no-items-box py-5" v-if="!missions.length">
+        <div class="text-center no-items-box py-5" v-if="!contracts.length">
           <i class="fas fa-ban" style="color:red"></i> No items to show
         </div>
       </div>
@@ -131,7 +131,7 @@
           v-model="currentPage"
           :total-rows="rows"
           :per-page="perPage"
-          aria-controls="missions-table"
+          aria-controls="contracts-table"
           first-text="⏮"
           prev-text="⏪"
           next-text="⏩"
@@ -144,14 +144,13 @@
 
 <script>
 export default {
-  name: "Missions",
+  name: "Contracts",
   data() {
     return {
       fields: [
         { key: "client", label: "client" },
         { key: "candidate", label: "candidate" },
         { key: "start-date", label: "Start Date" },
-        { key: "end-date", label: "End Date" },
         { key: "actions", label: "Actions" },
       ],
       errors: [],
@@ -168,15 +167,15 @@ export default {
     /**
      *  Return Users and Apply search filter
      */
-    missions() {
-      let missions = this.$store.getters.getMissions;
-      if (this.search == null) return missions;
-      return missions.filter((mission) => {
-        return mission.description.match(this.search);
+    contracts() {
+      let contracts = this.$store.getters.getContracts;
+      if (this.search == null) return contracts;
+      return contracts.filter((contract) => {
+        return contract.description.match(this.search);
       });
     },
     rows() {
-      return this.missions.length;
+      return this.contracts.length;
     },
   },
   watch: {
@@ -204,10 +203,10 @@ export default {
           "primary";
       }
     },
-    loadMissions() {
+    loadContracts() {
       this.isLoadingData = true;
       this.$store
-        .dispatch("loadMissions")
+        .dispatch("loadContracts")
         .then((result) => {
           this.isLoadingData = false;
         })
@@ -217,26 +216,26 @@ export default {
           this.error = "There was an error while bringing data";
         });
     },
-    deleteMission(id) {
+    deleteContract(id) {
       this.$store
-        .dispatch("deleteMission", id)
+        .dispatch("deleteContract", id)
         .then((res) => {
-          this.success = "Missions's deleted successfully !!!";
-          console.log("Mission's deleted successfully !!!");
-          this.loadMissions();
+          this.success = "Contracts's deleted successfully !!!";
+          console.log("Contract's deleted successfully !!!");
+          this.loadContracts();
         })
         .catch((error) => {
           console.log(error.message);
           this.error = "The delete process failed";
         });
     },
-    showMission(record) {
+    showContract(record) {
       let id = record.id;
-      this.$router.push({ path: `missions/${id}` });
+      this.$router.push({ path: `contracts/${id}` });
     },
   },
   created() {
-    this.loadMissions();
+    this.loadContracts();
   },
 };
 </script>

@@ -36,6 +36,10 @@ const NewCategory = () => import("@/views/categories/NewCategory");
 const Missions = () => import("@/views/missions/Missions");
 const Mission = () => import("@/views/missions/Mission");
 
+//Contracts
+const Contracts = () => import("@/views/contracts/Contracts");
+const Contract = () => import("@/views/contracts/Contract");
+
 
 //Skills
 const Skills = () => import("@/views/skills/Skills");
@@ -323,6 +327,58 @@ function configRoutes() {
               },
               name: "Mission",
               component: Mission,
+              /*children: [
+                {
+                  path: "edit",
+                  name: "Profile",
+                  component: CandidateProfile,
+                },
+              ],*/
+            },
+            
+          ]
+        },
+        // Contracts Route
+        {
+          path: "dash/contracts",
+          meta: {
+            requiresAuth: true,
+            is_admin : true,
+            label: "Contracts"
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            },
+          },
+          children: [
+            {
+              path: "",
+              name: "Contracts",
+              component: Contracts,
+            },
+            {
+              path: "add",
+              meta: {
+                label: "New Category",
+              },
+              name: "New Category",
+              component: NewCategory,
+              /*children: [
+                {
+                  path: "edit",
+                  name: "Profile",
+                  component: CandidateProfile,
+                },
+              ],*/
+            },
+            {
+              path: ":id",
+              meta: {
+                label: "Contract Details",
+              },
+              name: "Contract",
+              component: Contract,
               /*children: [
                 {
                   path: "edit",

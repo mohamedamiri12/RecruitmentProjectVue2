@@ -298,6 +298,49 @@ const actions = {
       });
     },
 
+    /**
+   *      Contracts Section
+  */
+
+    /**
+     *  Load Contracts From Api
+     */
+    loadContracts(context) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get("http://localhost:8000/api/administrator/contracts")
+          .then((result) => {
+            resolve(result);
+            context.commit("SAVE_CONTRACTS", result.data);
+          })
+          .catch((error) => {
+            reject(error);
+            console.log(error.message);
+          });
+      });
+    },
+    /**
+     *  DElete Contract and Update Local State
+     */
+    deleteContract(context, payload) {
+      return new Promise((resolve, reject) => {
+        console.log("Before Axios");
+        console.log(payload);
+        console.log("http://localhost:8000/api/administrator/contracts/" + payload);
+        axios
+          .delete("http://localhost:8000/api/administrator/contracts/" + payload)
+          .then((res) => {
+            console.log("After delete Done Axios");
+            console.log(res.data);
+            resolve(res);
+          })
+          .catch((error) => {
+            console.log(error);
+            reject(error);
+          });
+      });
+    },
+
   
 
   /**

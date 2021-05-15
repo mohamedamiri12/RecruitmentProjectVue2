@@ -108,6 +108,17 @@ const mutations = {
      SAVE_MISSIONS(state, payload){
         state.missions = payload;
     },
+    /**
+ *      Contracts Mutations Section : 
+ */    
+
+    /**
+     *      Set Comming Contracts From Api To State
+     */
+
+     SAVE_CONTRACTS(state, payload){
+        state.contracts = payload;
+    },
 /**
  *      Registration Mutations Section : 
  */    

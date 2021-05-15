@@ -35,6 +35,11 @@ const state = {
      *      Missions State
      */
       missions: [],
+
+      /**
+     *      Contracts State
+     */
+       contracts: [],
 }
 
 export default state;
