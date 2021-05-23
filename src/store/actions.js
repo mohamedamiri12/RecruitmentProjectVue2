@@ -1,10 +1,12 @@
-import axios from "axios";
 import state from "./state";
+import axios from "axios";
 
-import getHeader from "../config.js";
+//import getHeader from "../config.js";
 
-axios.defaults.headers.common['Accept'] = getHeader().Accept;
-axios.defaults.headers.common['Authorization'] = getHeader().Authorization;
+//axiosInstance.defaults.headers.common['Accept'] = getHeader().Accept;
+//axiosInstance.defaults.headers.common['Authorization'] = getHeader().Authorization;
+
+import axiosInstance from "../axiosInstance";
 
 const actions = {
   /**
@@ -16,13 +18,30 @@ const actions = {
   getUserById(context, payload) {
     context.commit("getUserById", payload);
   },
+  /**
+   *  count users From Api
+   */
+  countUsers() {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get("http://localhost:8000/api/administrators/count")
+        .then((result) => {
+          context.commit("SAVE_USERS_NUMBER", result.data);
+          resolve(res);
+        })
+        .catch((error) => {
+          console.log("errror");
+          reject(error)
+        });
+    });
+  },
 
   /**
    *  Load Users From Api
    */
   loadUsers(context) {
     return new Promise((resolve, reject) => {
-      axios
+      axiosInstance
         .get("http://localhost:8000/api/administrators")
         .then((result) => {
           context.commit("SAVE_USERS", result.data);
@@ -38,12 +57,12 @@ const actions = {
    *      Clients Section
    */
 
-    /**
-     *  Load actions From Api
-     */
+  /**
+   *  Load actions From Api
+   */
   loadClients(context) {
     return new Promise((resolve, reject) => {
-      axios
+      axiosInstance
         .get("http://localhost:8000/api/administrator/clients")
         .then((result) => {
           resolve(result);
@@ -60,13 +79,13 @@ const actions = {
    */
   deleteClient(context, payload) {
     return new Promise((resolve, reject) => {
-      console.log("Before Axios");
+      console.log("Before axiosInstance");
       console.log(payload);
       console.log("http://localhost:8000/api/administrator/clients/" + payload);
-      axios
+      axiosInstance
         .delete("http://localhost:8000/api/administrator/clients/" + payload)
         .then((res) => {
-          console.log("After delete Done Axios");
+          console.log("After delete Done axiosInstance");
           console.log(res.data);
           resolve(res);
         })
@@ -80,54 +99,56 @@ const actions = {
    *      Candidates Section
    */
 
-    /**
-     *  Load actions From Api
-     */
-      loadCandidates(context){
-      return new Promise((resolve, reject) => {
-        axios
-          .get("http://localhost:8000/api/administrator/candidates")
-          .then((result) => {
-            resolve(result);
-            context.commit("SAVE_CANDIDATES", result.data);
-          })
-          .catch((error) => {
-            reject(error);
-            console.log(error.message);
-          });
-      });
-    },
-    /**
-     *  DElete Client and Update Local State
-     */
-    deleteCandidate(context, payload) {
-      return new Promise((resolve, reject) => {
-        console.log("Before Axios");
-        console.log(payload);
-        console.log("http://localhost:8000/api/administrator/candidates/" + payload);
-        axios
-          .delete("http://localhost:8000/api/administrator/candidates/" + payload)
-          .then((res) => {
-            console.log("After delete Done Axios");
-            console.log(res.data);
-            resolve(res);
-          })
-          .catch((error) => {
-            console.log(error);
-            reject(error);
-          });
-      });
-    },
+  /**
+   *  Load actions From Api
+   */
+  loadCandidates(context) {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get("http://localhost:8000/api/administrator/candidates")
+        .then((result) => {
+          resolve(result);
+          context.commit("SAVE_CANDIDATES", result.data);
+        })
+        .catch((error) => {
+          reject(error);
+          console.log(error.message);
+        });
+    });
+  },
+  /**
+   *  DElete Client and Update Local State
+   */
+  deleteCandidate(context, payload) {
+    return new Promise((resolve, reject) => {
+      console.log("Before axiosInstance");
+      console.log(payload);
+      console.log(
+        "http://localhost:8000/api/administrator/candidates/" + payload
+      );
+      axiosInstance
+        .delete("http://localhost:8000/api/administrator/candidates/" + payload)
+        .then((res) => {
+          console.log("After delete Done axiosInstance");
+          console.log(res.data);
+          resolve(res);
+        })
+        .catch((error) => {
+          console.log(error);
+          reject(error);
+        });
+    });
+  },
   /**
    *      Categories Section
    */
 
-    /**
-     *  Load categories From Api
-     */
+  /**
+   *  Load categories From Api
+   */
   loadCategories(context) {
     return new Promise((resolve, reject) => {
-      axios
+      axiosInstance
         .get("http://localhost:8000/api/administrator/categories")
         .then((result) => {
           context.commit("SAVE_CATEGORIES", result.data);
@@ -144,11 +165,11 @@ const actions = {
    */
   deleteCategory(context, payload) {
     return new Promise((resolve, reject) => {
-      console.log("Before Axios");
-      axios
+      console.log("Before axiosInstance");
+      axiosInstance
         .delete("http://localhost:8000/api/administrator/categories/" + payload)
         .then((res) => {
-          console.log("After delete Done Axios");
+          console.log("After delete Done axiosInstance");
           console.log(res.data);
           resolve(res);
         })
@@ -160,56 +181,56 @@ const actions = {
   },
 
   /**
-     *        Skills Section
-     */
-    /**
-     *  Load actions From Api
-     */
-    loadSkills(context) {
-      return new Promise((resolve, reject) => {
-        axios
-          .get("http://localhost:8000/api/administrator/skills")
-          .then((result) => {
-            resolve(result.data);
-            context.commit("SAVE_SKILLS", result.data);
-          })
-          .catch((error) => {
-            reject(error);
-            console.log(error.message);
-          });
-      });
-    },
-    /**
-     *  DElete Candidate and Update Local State
-     */
-    deleteSkill(context, payload) {
-      return new Promise((resolve, reject) => {
-        console.log("Before Axios");
-        console.log(payload);
-        console.log("http://localhost:8000/api/administrator/skills/" + payload);
-        axios
-          .delete("http://localhost:8000/api/administrator/skills/" + payload)
-          .then((res) => {
-            console.log("After delete Done Axios");
-            console.log(res.data);
-            resolve(res);
-          })
-          .catch((error) => {
-            console.log(error);
-            reject(error);
-          });
-      });
-    },
+   *        Skills Section
+   */
+  /**
+   *  Load actions From Api
+   */
+  loadSkills(context) {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get("http://localhost:8000/api/administrator/skills")
+        .then((result) => {
+          resolve(result.data);
+          context.commit("SAVE_SKILLS", result.data);
+        })
+        .catch((error) => {
+          reject(error);
+          console.log(error.message);
+        });
+    });
+  },
+  /**
+   *  DElete Candidate and Update Local State
+   */
+  deleteSkill(context, payload) {
+    return new Promise((resolve, reject) => {
+      console.log("Before axiosInstance");
+      console.log(payload);
+      console.log("http://localhost:8000/api/administrator/skills/" + payload);
+      axiosInstance
+        .delete("http://localhost:8000/api/administrator/skills/" + payload)
+        .then((res) => {
+          console.log("After delete Done axiosInstance");
+          console.log(res.data);
+          resolve(res);
+        })
+        .catch((error) => {
+          console.log(error);
+          reject(error);
+        });
+    });
+  },
   /**
    *  Add Skill To Category Action
    */
   addSkillToCategory(context, payload) {
     return new Promise((resolve, reject) => {
-      console.log("Before Axios");
+      console.log("Before axiosInstance");
       const newSkillRequest = {
         new_skill_id: payload.skill_id,
       };
-      axios
+      axiosInstance
         .post(
           "http://localhost:8000/api/administrator/categories/" +
             payload.category_id +
@@ -217,7 +238,7 @@ const actions = {
           newSkillRequest
         )
         .then((res) => {
-          console.log("After Done Axios");
+          console.log("After Done axiosInstance");
           console.log(res.data);
           resolve(res);
         })
@@ -233,11 +254,11 @@ const actions = {
    */
   deleteSkillFromCategory(context, payload) {
     return new Promise((resolve, reject) => {
-      console.log("Before Axios");
+      console.log("Before axiosInstance");
       const oldSkillRequest = {
         old_skill_id: payload.skill_id,
       };
-      axios
+      axiosInstance
         .post(
           "http://localhost:8000/api/administrator/categories/" +
             payload.category_id +
@@ -245,7 +266,7 @@ const actions = {
           oldSkillRequest
         )
         .then((res) => {
-          console.log("After Done Axios");
+          console.log("After Done axiosInstance");
           console.log(res.data);
           resolve(res);
         })
@@ -257,106 +278,108 @@ const actions = {
   },
   /**
    *      Missions Section
-  */
+   */
 
-    /**
-     *  Load Missions From Api
-     */
-    loadMissions(context) {
-      return new Promise((resolve, reject) => {
-        axios
-          .get("http://localhost:8000/api/administrator/missions")
-          .then((result) => {
-            resolve(result);
-            context.commit("SAVE_MISSIONS", result.data);
-          })
-          .catch((error) => {
-            reject(error);
-            console.log(error.message);
-          });
-      });
-    },
-    /**
-     *  DElete Mission and Update Local State
-     */
-    deleteMission(context, payload) {
-      return new Promise((resolve, reject) => {
-        console.log("Before Axios");
-        console.log(payload);
-        console.log("http://localhost:8000/api/administrator/missions/" + payload);
-        axios
-          .delete("http://localhost:8000/api/administrator/missions/" + payload)
-          .then((res) => {
-            console.log("After delete Done Axios");
-            console.log(res.data);
-            resolve(res);
-          })
-          .catch((error) => {
-            console.log(error);
-            reject(error);
-          });
-      });
-    },
+  /**
+   *  Load Missions From Api
+   */
+  loadMissions(context) {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get("http://localhost:8000/api/administrator/missions")
+        .then((result) => {
+          resolve(result);
+          context.commit("SAVE_MISSIONS", result.data);
+        })
+        .catch((error) => {
+          reject(error);
+          console.log(error.message);
+        });
+    });
+  },
+  /**
+   *  DElete Mission and Update Local State
+   */
+  deleteMission(context, payload) {
+    return new Promise((resolve, reject) => {
+      console.log("Before axiosInstance");
+      console.log(payload);
+      console.log(
+        "http://localhost:8000/api/administrator/missions/" + payload
+      );
+      axiosInstance
+        .delete("http://localhost:8000/api/administrator/missions/" + payload)
+        .then((res) => {
+          console.log("After delete Done axiosInstance");
+          console.log(res.data);
+          resolve(res);
+        })
+        .catch((error) => {
+          console.log(error);
+          reject(error);
+        });
+    });
+  },
 
-    /**
+  /**
    *      Contracts Section
-  */
+   */
 
-    /**
-     *  Load Contracts From Api
-     */
-    loadContracts(context) {
-      return new Promise((resolve, reject) => {
-        axios
-          .get("http://localhost:8000/api/administrator/contracts")
-          .then((result) => {
-            resolve(result);
-            context.commit("SAVE_CONTRACTS", result.data);
-          })
-          .catch((error) => {
-            reject(error);
-            console.log(error.message);
-          });
-      });
-    },
-    /**
-     *  DElete Contract and Update Local State
-     */
-    deleteContract(context, payload) {
-      return new Promise((resolve, reject) => {
-        console.log("Before Axios");
-        console.log(payload);
-        console.log("http://localhost:8000/api/administrator/contracts/" + payload);
-        axios
-          .delete("http://localhost:8000/api/administrator/contracts/" + payload)
-          .then((res) => {
-            console.log("After delete Done Axios");
-            console.log(res.data);
-            resolve(res);
-          })
-          .catch((error) => {
-            console.log(error);
-            reject(error);
-          });
-      });
-    },
-
-  
+  /**
+   *  Load Contracts From Api
+   */
+  loadContracts(context) {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get("http://localhost:8000/api/administrator/contracts")
+        .then((result) => {
+          resolve(result);
+          context.commit("SAVE_CONTRACTS", result.data);
+        })
+        .catch((error) => {
+          reject(error);
+          console.log(error.message);
+        });
+    });
+  },
+  /**
+   *  DElete Contract and Update Local State
+   */
+  deleteContract(context, payload) {
+    return new Promise((resolve, reject) => {
+      console.log("Before axiosInstance");
+      console.log(payload);
+      console.log(
+        "http://localhost:8000/api/administrator/contracts/" + payload
+      );
+      axiosInstance
+        .delete("http://localhost:8000/api/administrator/contracts/" + payload)
+        .then((res) => {
+          console.log("After delete Done axiosInstance");
+          console.log(res.data);
+          resolve(res);
+        })
+        .catch((error) => {
+          console.log(error);
+          reject(error);
+        });
+    });
+  },
 
   /**
    *      Registration Section
    */
 
-    /**
-     *  Sign In Action
-     */
+  /**
+   *  Sign In Action
+   */
   loginPerform(context, payload) {
     return new Promise((resolve, reject) => {
-      console.log("Before Axios");
+      console.log("Before axiosInstance");
       axios
         .post("http://localhost:8000/api/auth/login", payload)
         .then((res) => {
-          console.log("After DOne Axios");
+          console.log("After Done axiosInstance");
           context.commit("SET_ACTIF_ADMINISTRATOR", res.data.administrator);
           context.commit("SET_TOKEN_ACCESS", res.data.access_token);
           context.commit("SET_USER_LOGGED_STATUS", true);
@@ -372,16 +395,16 @@ const actions = {
     });
   },
 
-    /**
-     *  REgistration Action
-     */
+  /**
+   *  REgistration Action
+   */
   registrationPerform(context, payload) {
     return new Promise((resolve, reject) => {
-      console.log("Before Axios");
-      axios
+      console.log("Before axiosInstance");
+      axiosInstance
         .post("http://localhost:8000/api/auth/register", payload)
         .then((res) => {
-          console.log("After Done Axios");
+          console.log("After Done axiosInstance");
           console.log(res.data);
           resolve(res);
         })
@@ -397,13 +420,13 @@ const actions = {
 
   logoutPerform(context, payload) {
     return new Promise((resolve, reject) => {
-      console.log("Before Axios");
-      axios
+      console.log("Before axiosInstance");
+      axiosInstance
         .post("http://localhost:8000/api/auth/logout", {
           token: state.access_token,
         })
         .then((res) => {
-          console.log("After Done Logout Axios");
+          console.log("After Done Logout axiosInstance");
           context.commit("SET_ACTIF_ADMINISTRATOR", null);
           context.commit("SET_TOKEN_ACCESS", null);
           context.commit("SET_USER_LOGGED_STATUS", false);

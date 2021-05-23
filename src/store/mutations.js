@@ -24,6 +24,14 @@ const mutations = {
     },
 
     /**
+     *      set users number
+     */
+
+    SAVE_USERS_NUMBER(state, payload){
+        state.usersNumber = payload
+    },
+
+    /**
      *      Change The User Spinner Status
      */
 

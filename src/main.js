@@ -29,6 +29,7 @@ Vue.use(CoreuiVue)
 //Vue.use(allowCrossDomain)
 Vue.prototype.$log = console.log.bind(console)
 
+
 new Vue({
   el: '#app',
   router,

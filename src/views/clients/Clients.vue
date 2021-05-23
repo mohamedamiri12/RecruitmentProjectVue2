@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axiosInstance from "../../axiosInstance";
 export default {
   name: "Users",
   data() {
@@ -204,7 +204,7 @@ export default {
         "http://localhost:8000/api/administrator/clients/" + id;
       const config = { headers: { "Content-Type": "application/json" } };
 
-      axios
+      axiosInstance
         .put(apiUpdateRoute, suspendedClient, config)
         .then((res) => {
           console.log("After Done Axios ==> suspend Client");
@@ -228,7 +228,7 @@ export default {
         "http://localhost:8000/api/administrator/clients/" + id;
       const config = { headers: { "Content-Type": "application/json" } };
 
-      axios
+      axiosInstance
         .put(apiUpdateRoute, activatedClient, config)
         .then((res) => {
           console.log("After Done Axios ==> activated Client");

@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axiosInstance from "../../axiosInstance";
 export default {
   props: ["editedSkill"],
   data() {
@@ -149,7 +149,7 @@ export default {
         "http://localhost:8000/api/administrator/skills/" + id;
       const config = { headers: { "content-type": "multipart/form-data" } };
 
-      axios
+      axiosInstance
         .post(apiUpdateRoute, updatedSkill, config)
         .then((res) => {
           console.log("After Done Axios ==> update Skill");

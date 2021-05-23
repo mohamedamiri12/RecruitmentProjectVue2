@@ -2,6 +2,12 @@ import state from "./state";
 
 const getters = {
   /**
+   *  Token Getters
+   */
+  getToken(state){
+    return state.access_token;
+  },
+  /**
    *     Users Section
    */
   /**
@@ -19,6 +25,10 @@ const getters = {
   },
   getActifAdministrator(state) {
     return state.administrator;
+  },
+  getUsersNumber(state){
+    console.log('users number : '+ state.usersNumber)
+    return state.usersNumber;
   },
 
   /**

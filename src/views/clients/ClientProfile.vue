@@ -167,7 +167,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axiosInstance from "../../axiosInstance";
 
 export default {
   props: ["editedClient"],
@@ -377,7 +377,7 @@ export default {
         "http://localhost:8000/api/administrator/clients/" + id;
       const config = { headers: { "content-type": "multipart/form-data" } };
 
-      axios
+      axiosInstance
         .post(apiUpdateRoute, updatedCLient, config)
         .then((res) => {
           console.log("After Done Axios ==> update Client");
@@ -386,10 +386,10 @@ export default {
           this.countDownTimer();
         })
         .catch((error) => {
-          console.log(error.response.data);
           this.isLoading = false;
           this.error = "Something wrong, Please try again";
           this.countDownTimer();
+          console.log(error.response.data);
         });
     },
   },

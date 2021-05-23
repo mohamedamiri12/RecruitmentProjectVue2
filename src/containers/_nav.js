@@ -38,7 +38,7 @@ export default [
         _name: 'CSidebarNavItem',
         name: 'Categories',
         to: '/dash/categories',
-        icon: 'cil-library'
+        icon: 'fas fa-th-list'
       },
       {
         _name: 'CSidebarNavItem',

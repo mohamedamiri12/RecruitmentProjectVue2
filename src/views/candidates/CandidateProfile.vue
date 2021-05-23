@@ -167,7 +167,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axiosInstance from "../../axiosInstance";
 export default {
   props: ["editedCandidate"],
   data() {
@@ -344,6 +344,20 @@ export default {
       this.validEmail();
       this.validPhoneNumber();
 
+      /**
+       *    Return if the errors is here
+       */
+      if (
+        this.firstNameErrors.length ||
+        this.lastNameErrors.length ||
+        this.emailErrors.length ||
+        this.passwordErrors.length ||
+        this.phoneNumberErrors.length
+      ) {
+        this.isLoading = false;
+        return;
+      }
+
       const updatedCAndidate = new FormData();
 
       updatedCAndidate.append("first_name", this.candidate.first_name);
@@ -360,7 +374,7 @@ export default {
         "http://localhost:8000/api/administrator/candidates/" + id;
       const config = { headers: { "content-type": "multipart/form-data" } };
 
-      axios
+      axiosInstance
         .post(apiUpdateRoute, updatedCAndidate, config)
         .then((res) => {
           console.log("After Done Axios ==> update Candidate");

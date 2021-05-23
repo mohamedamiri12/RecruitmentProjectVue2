@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axiosInstance from "../../axiosInstance";
 export default {
   name: "Candidates",
   data() {
@@ -203,7 +203,7 @@ export default {
         "http://localhost:8000/api/administrator/candidates/" + id;
       const config = { headers: { "Content-Type": "application/json" } };
 
-      axios
+      axiosInstance
         .put(apiUpdateRoute, suspendedCandidate, config)
         .then((res) => {
           console.log("After Done Axios ==> suspend Candidate");
@@ -227,7 +227,7 @@ export default {
         "http://localhost:8000/api/administrator/candidates/" + id;
       const config = { headers: { "Content-Type": "application/json" } };
 
-      axios
+      axiosInstance
         .put(apiUpdateRoute, activatedCandidate, config)
         .then((res) => {
           console.log("After Done Axios ==> activated Candidate");

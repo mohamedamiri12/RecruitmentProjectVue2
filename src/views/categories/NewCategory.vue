@@ -101,12 +101,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axiosInstance from '../../axiosInstance'
 
-import getHeader from '../../config.js'
-
-axios.defaults.headers.common['Accept'] = getHeader().Accept;
-axios.defaults.headers.common['Authorization'] = getHeader().Authorization;
 export default {
   data() {
     return {
@@ -188,7 +184,7 @@ export default {
       this.validName();
       this.validDescription();
 
-/**
+      /**
        *    Return if the errors is here
        */
       if (
@@ -206,7 +202,7 @@ export default {
       }
 
       const apiAddRoute = "http://localhost:8000/api/administrator/categories";
-      axios
+      axiosInstance
         .post(apiAddRoute, newCategory)
         .then((res) => {
           console.log("After Done Axios ==> Create Category");

@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="card">
       <div class="card-header d-flex justify-content-between">
-        <b class="d-block">categories</b>
+        <b class="d-block">Categories</b>
         <div class="box">
           <div class="input-group">
             <div class="form-outline">
@@ -17,9 +17,7 @@
             <button id="search-button" type="button" class="btn btn-primary">
               <i class="fas fa-search"></i>
             </button>
-            <button class="btn btn-success ml-2" @click="addNewCategory"><i class="fas fa-plus mr-2"></i>Add new Category</button>
           </div>
-          
         </div>
       </div>
       <div class="card-body">
@@ -58,7 +56,9 @@
                     ><i class="fas fa-expand-alt mr-2"></i>Show</b-button
                   >
                   <li class="list-inline-item">
-                    <button class="btn btn-warning py-1 px-2"><i class="fas fa-edit mr-2"></i>Edit</button>
+                    <button class="btn btn-warning py-1 px-2">
+                      <i class="fas fa-edit mr-2"></i>Edit
+                    </button>
                   </li>
                 </ul>
               </div>
@@ -79,7 +79,25 @@
           Loading ...
         </div>
       </div>
-      <div class="card-footer text-muted w-100"></div>
+      <div class="card-footer text-muted w-100 d-flex justify-content-between">
+        <div class=""></div>
+        <b-pagination
+          class="d-flex justify-content-center mt-2 mb-1"
+          v-model="currentPage"
+          :total-rows="rows"
+          :per-page="perPage"
+          aria-controls="users-table"
+          first-text="⏮"
+          prev-text="⏪"
+          next-text="⏩"
+          last-text="⏭"
+        ></b-pagination>
+        <div class="mr-2 float-right mt-2">
+          <button class="btn btn-success" @click="addNewCategory">
+            <i class="fas fa-plus"></i> Add new category
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -92,21 +110,34 @@ export default {
   },
   data() {
     return {
-      error: '',
-      success: '',
+      currentPage: 1,
+      perPage: 6,
+      error: "",
+      success: "",
       isLoadingData: false,
       search: null,
     };
   },
   computed: {
+    rows() {
+      return this.categories.length;
+    },
     categories() {
       let categories = this.$store.getters.getCategories;
       if (this.search == null) return categories;
       return categories.filter((category) => {
-        return (
-          category.name.match(this.search) 
-        );
+        return category.name.match(this.search);
       });
+    },
+  },
+  watch: {
+    $route: {
+      immediate: true,
+      handler(route) {
+        if (route.query && route.query.page) {
+          this.currentPage = Number(route.query.page);
+        }
+      },
     },
   },
   methods: {
@@ -140,7 +171,7 @@ export default {
     },
     showCategory(id) {
       this.$router.push({ path: `categories/${id}` });
-    }
+    },
   },
   created() {
     this.loadCategories();

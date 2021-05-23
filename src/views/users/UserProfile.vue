@@ -172,7 +172,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axiosInstance from "../../axiosInstance";
 export default {
   props: ["editedUser"],
   data() {
@@ -366,7 +366,10 @@ export default {
       const apiUpdateRoute = "http://localhost:8000/api/administrators/" + id;
       const config = { headers: { 'content-type': 'multipart/form-data' } };
 
-      axios.post(apiUpdateRoute, updatedAdmin, config)
+    /** 
+     *  Warning here ==> axiosInstance in place of axios
+     */
+      axiosInstance.post(apiUpdateRoute, updatedAdmin, config)
         .then((res) => {
           console.log("After Done Axios ==> update User");
           this.isLoading = false;

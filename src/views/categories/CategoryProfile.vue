@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axiosInstance from "../../axiosInstance";
 export default {
   props: ["editedCategory"],
   data() {
@@ -129,6 +129,14 @@ export default {
        */
       this.validName();
 
+      /**
+       *    Return if the errors is here
+       */
+      if (this.NameErrors.length) {
+        this.isLoading = false;
+        return;
+      }
+
       const updatedCategory = new FormData();
 
       updatedCategory.append("name", this.category.name);
@@ -140,7 +148,7 @@ export default {
         "http://localhost:8000/api/administrator/categories/" + id;
       const config = { headers: { "content-type": "multipart/form-data" } };
 
-      axios
+      axiosInstance
         .post(apiUpdateRoute, updatedCategory, config)
         .then((res) => {
           console.log("After Done Axios ==> update Category");
