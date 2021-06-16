@@ -9,7 +9,12 @@
       <CHeaderNavLink>
         <div class="c-avatar">
           <img
+            v-if="administratorImage!=null"
             :src="administratorImage"
+            class="c-avatar-img "
+          />
+          <img
+            v-if="administratorImage==null"
             class="c-avatar-img "
           />
         </div>

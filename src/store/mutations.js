@@ -56,6 +56,11 @@ const mutations = {
     SET_USER_LOGGED_STATUS(state,payload){
         state.isUserLogged = payload;
     },
+    REMOVE_ADMIN_DATA(state) {
+        state.access_token = null;
+        state.isUserLogged = false;
+        state.administrator = null;
+    },
 
 /**
  *      Clients Mutations Section : 

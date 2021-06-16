@@ -141,8 +141,8 @@ export default {
     },
   },
   created() {
-    console.log("count Numbers ...");
-    this.countUsers();
+    //console.log("count Numbers ...");
+    //this.countUsers();
   },
 };
 </script>

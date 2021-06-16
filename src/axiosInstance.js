@@ -17,7 +17,8 @@ axiosInstance.interceptors.response.use(
   (error) => {
     if (error.response.status === 401) {
       localStorage.removeItem("token");
-      localStorage.removeItem("admin");
+      console.log('Token from axiosInstance : Bearer ' + store.getters.getToken)
+      store.commit('REMOVE_ADMIN_DATA');
       router.push('/login');
     }
     return error;

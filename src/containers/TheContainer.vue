@@ -34,14 +34,14 @@ export default {
       return this.$store.getters.getActifAdministrator;
     }
   },
-  created(){
-    const activeAdmin = JSON.parse(localStorage.getItem('admin'))
-    const token = localStorage.getItem('token')
-    if(activeAdmin && token ){
-       this.$store.commit('SET_ACTIF_ADMINISTRATOR',activeAdmin);
-       this.$store.commit('SET_TOKEN_ACCESS',token)
-    }
-  }
+  // created(){
+  //   const activeAdmin = JSON.parse(localStorage.getItem('admin'))
+  //   const token = localStorage.getItem('token')
+  //   if(activeAdmin && token ){
+  //      this.$store.commit('SET_ACTIF_ADMINISTRATOR',activeAdmin);
+  //      this.$store.commit('SET_TOKEN_ACCESS',token)
+  //   }
+  // }
 }
 </script>
 

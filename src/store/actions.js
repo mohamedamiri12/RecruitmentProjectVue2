@@ -373,19 +373,23 @@ const actions = {
   /**
    *  Sign In Action
    */
-  loginPerform(context, payload) {
+  loginPerform({ commit, dispatch }, payload) {
     return new Promise((resolve, reject) => {
       console.log("Before axiosInstance");
       axios
         .post("http://localhost:8000/api/auth/login", payload)
         .then((res) => {
           console.log("After Done axiosInstance");
-          context.commit("SET_ACTIF_ADMINISTRATOR", res.data.administrator);
-          context.commit("SET_TOKEN_ACCESS", res.data.access_token);
-          context.commit("SET_USER_LOGGED_STATUS", true);
+          //context.commit("SET_ACTIF_ADMINISTRATOR", res.data.administrator);
+          commit("SET_TOKEN_ACCESS", res.data.access_token);
+          //commit("SET_USER_LOGGED_STATUS", true);
           localStorage.setItem("token", res.data.access_token);
-          localStorage.setItem("admin", JSON.stringify(res.data.administrator));
-          console.log(res.data);
+          //localStorage.setItem("admin", JSON.stringify(res.data.administrator));
+          //console.log(res.data);
+          /**
+           *  get the actif Admin
+           */
+           dispatch("getActifAdmin", res.data.access_token);
           resolve(res);
         })
         .catch((error) => {
@@ -393,6 +397,24 @@ const actions = {
           reject(error);
         });
     });
+  },
+  /**
+   *  Check Administrator status
+  */
+   getActifAdmin({ commit, getters }) {
+    axios.defaults.headers.common["Accept"] = "application/json";
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + getters.getToken;
+    axios
+      .post("http://localhost:8000/api/auth/me")
+      .then((response) => {
+        commit("SET_USER_LOGGED_STATUS", true);
+        commit("SET_ACTIF_ADMINISTRATOR", response.data);
+      })
+      .catch((error) => {
+        console.log("status : " + error.response);
+        commit("SET_USER_LOGGED_STATUS", false);
+      });
   },
 
   /**

@@ -10,6 +10,8 @@ const state = {
     access_token: '',
     isUserLogged: false,
     usersNumber: null,
+    administrator_login_status: null,
+    actif_administrator: null,
     /**
      *      Clients State
      */
